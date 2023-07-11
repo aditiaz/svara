@@ -1,107 +1,128 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { PokemonsContext } from "../context/pokemonContext";
 import ash from "../assets/pictures/ash.png";
 import pokeAlt from "../assets/pictures/pokeAlt.png";
 import axios from "axios";
+import PokemonAPI from "../utils/pokemonApi";
 
 const Home = () => {
   const { pokemons } = useContext(PokemonsContext);
   let pokemonArray = Object.values(pokemons);
-  const pokemonsTypw = [
+  const pokemonsType = [
     {
       name: "normal",
       url: "https://pokeapi.co/api/v2/type/1/",
+      pokemon: [],
     },
     {
       name: "fighting",
       url: "https://pokeapi.co/api/v2/type/2/",
+      pokemon: [],
     },
     {
       name: "flying",
       url: "https://pokeapi.co/api/v2/type/3/",
+      pokemon: [],
     },
     {
       name: "poison",
       url: "https://pokeapi.co/api/v2/type/4/",
+      pokemon: [],
     },
     {
       name: "ground",
       url: "https://pokeapi.co/api/v2/type/5/",
+      pokemon: [],
     },
     {
       name: "rock",
       url: "https://pokeapi.co/api/v2/type/6/",
+      pokemon: [],
     },
     {
       name: "bug",
       url: "https://pokeapi.co/api/v2/type/7/",
+      pokemon: [],
     },
     {
       name: "ghost",
       url: "https://pokeapi.co/api/v2/type/8/",
+      pokemon: [],
     },
     {
       name: "steel",
       url: "https://pokeapi.co/api/v2/type/9/",
+      pokemon: [],
     },
     {
       name: "fire",
       url: "https://pokeapi.co/api/v2/type/10/",
+      pokemon: [],
     },
     {
       name: "water",
       url: "https://pokeapi.co/api/v2/type/11/",
+      pokemon: [],
     },
     {
       name: "grass",
       url: "https://pokeapi.co/api/v2/type/12/",
+      pokemon: [],
     },
     {
       name: "electric",
       url: "https://pokeapi.co/api/v2/type/13/",
+      pokemon: [],
     },
     {
       name: "psychic",
       url: "https://pokeapi.co/api/v2/type/14/",
+      pokemon: [],
     },
     {
       name: "ice",
       url: "https://pokeapi.co/api/v2/type/15/",
+      pokemon: [],
     },
     {
       name: "dragon",
       url: "https://pokeapi.co/api/v2/type/16/",
+      pokemon: [],
     },
     {
       name: "dark",
       url: "https://pokeapi.co/api/v2/type/17/",
+      pokemon: [],
     },
     {
       name: "fairy",
       url: "https://pokeapi.co/api/v2/type/18/",
+      pokemon: [],
     },
     {
       name: "unknown",
       url: "https://pokeapi.co/api/v2/type/10001/",
+      pokemon: [],
     },
     {
       name: "shadow",
-      url: "https://pokeapi.co/api/v2/type/10002/",
+      url: "https://pokeapi.co/api/v2/type/10001/",
+      pokemon: [],
     },
   ];
   const [type, setType] = useState([]);
 
-  const fetchType = async () => {
-    try {
-      const response = await axios.get("https://pokeapi.co/api/v2/type/13/");
-      setType(response.data.pokemon);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchType();
-  console.log(type);
+  // const fetchType = async () => {
+  //   try {
+  //     const response = await axios.get("https://pokeapi.co/api/v2/type/13/");
+  //     setType(response.data.pokemon);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // fetchType();
+  // console.log(type);
   const [search, setSearch] = useState();
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -112,6 +133,28 @@ const Home = () => {
     });
     pokemonArray = Object.values(searchResult);
   }
+
+  const endPoints = [];
+  for (let i = 1; i <= 18; i++) {
+    endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
+  }
+  endPoints.push("https://pokeapi.co/api/v2/type/10001/", "https://pokeapi.co/api/v2/type/10002/");
+  // console.log(endPoints);
+
+  const fetchPokemonType = async () => {
+    try {
+      const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
+      for (let i = 1; i <= 18; i++) {
+        pokemonsType[i].pokemon = results[i].data.pokemon;
+      }
+      console.log(pokemonsType[16].pokemon);
+    } catch (error) {
+      console / log(error);
+    }
+  };
+  useEffect(() => {
+    fetchPokemonType();
+  }, []);
 
   return (
     <>
