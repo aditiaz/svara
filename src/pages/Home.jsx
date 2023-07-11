@@ -100,16 +100,6 @@ const Home = () => {
       url: "https://pokeapi.co/api/v2/type/18/",
       pokemon: [],
     },
-    {
-      name: "unknown",
-      url: "https://pokeapi.co/api/v2/type/10001/",
-      pokemon: [],
-    },
-    {
-      name: "shadow",
-      url: "https://pokeapi.co/api/v2/type/10001/",
-      pokemon: [],
-    },
   ];
   const [type, setType] = useState([]);
 
@@ -138,18 +128,19 @@ const Home = () => {
   for (let i = 1; i <= 18; i++) {
     endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
   }
-  endPoints.push("https://pokeapi.co/api/v2/type/10001/", "https://pokeapi.co/api/v2/type/10002/");
-  // console.log(endPoints);
 
   const fetchPokemonType = async () => {
     try {
       const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
+      pokemonsType[19].pokemon = results[19].data.pokemon;
       for (let i = 1; i <= 18; i++) {
         pokemonsType[i].pokemon = results[i].data.pokemon;
       }
-      console.log(pokemonsType[16].pokemon);
+
+      console.log(pokemonsType[17].pokemon);
+      console.log(pokemonsType);
     } catch (error) {
-      console / log(error);
+      console.log(error);
     }
   };
   useEffect(() => {
