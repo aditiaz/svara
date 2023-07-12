@@ -106,12 +106,6 @@ const Home = () => {
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
-  // if (search) {
-  //   const searchResult = pokemonArray.filter((e) => {
-  //     return e.name.toLowerCase().includes(search.toLowerCase());
-  //   });
-  //   pokemonArray = Object.values(searchResult);
-  // }
 
   const endPoints = [];
   for (let i = 1; i <= 18; i++) {
@@ -137,10 +131,16 @@ const Home = () => {
   const updatedPoke = pokemonArray.filter((pokemon) =>
     type.some((selected) => selected.pokemon.name == pokemon.name)
   );
-  // console.log(updatedPoke);
-  // console.log(btn);
+  const [btnColor, setBtnColor] = useState();
+  const [btnColorAll, setBtnColorAll] = useState();
+
   const handleBtn = (i) => {
-    // pokemonArray = updatedPoke;
+    if (btnColor == "All Pokes" && btnColor !== null) {
+      setBtnColorAll(false);
+    } else {
+      setBtnColorAll(true);
+    }
+    setBtnColor(i);
     setBtn(i);
     setSearch(null);
   };
@@ -164,7 +164,7 @@ const Home = () => {
     "Dark",
     "Fairy",
   ];
-  let finalPokemons;
+  let finalPokemons = pokemonArray;
   if (search) {
     const searchResult = pokemonArray.filter((e) => {
       return e.name.toLowerCase().includes(search.toLowerCase());
@@ -195,20 +195,26 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="w-screen h-20 my-16 flex justify-center items-center ">
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleBtn("All Pokes")}
+              className={` ${
+                btnColor == "All Pokes" ? "text-blue-500 bg-white" : "bg-blue-500 text-white"
+              } mt-10 hover:bg-blue-700 font-bold py-2 px-4 rounded`}
+            >
+              All Pokemons
+            </button>
+          </div>
+          <div className="w-screen h-20 mt-2 mb-14 flex justify-center items-center ">
             <div className="  h-full grid grid-cols-9  gap-5">
-              <button
-                onClick={() => handleBtn("All Pokes")}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                All Pokemons{" "}
-              </button>
               {typeNames.map((e, i) => {
                 return (
                   <>
                     <button
                       onClick={() => handleBtn(i)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className={` ${
+                        btnColor == i ? "text-blue-500 bg-white" : "bg-blue-500 text-white"
+                      }  hover:bg-blue-700 font-bold py-2 px-4 rounded`}
                     >
                       {e}
                     </button>
@@ -222,7 +228,7 @@ const Home = () => {
         <div className="flex justify-center w-screen">
           <div className="grid grid-cols-4 gap-7 gap-x-11 gap-y-7   mb-10">
             {pokemons.length != 0 ? (
-              pokemonArray.length === 0 ? (
+              finalPokemons.length === 0 ? (
                 <div className="flex justify-center w-screen mt-24 h-screen">
                   <div className=" h-64">
                     <h1 className="text-3xl text-center mb-11 mr-20 font-bold text-gray-800 leading-tight">
