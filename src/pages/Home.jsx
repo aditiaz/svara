@@ -101,68 +101,126 @@ const Home = () => {
       pokemon: [],
     },
   ];
-  const [type, setType] = useState([]);
 
-  // const fetchType = async () => {
-  //   try {
-  //     const response = await axios.get("https://pokeapi.co/api/v2/type/13/");
-  //     setType(response.data.pokemon);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // fetchType();
-  // console.log(type);
   const [search, setSearch] = useState();
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
-  if (search) {
-    const searchResult = pokemonArray.filter((e) => {
-      return e.name.toLowerCase().includes(search.toLowerCase());
-    });
-    pokemonArray = Object.values(searchResult);
-  }
+  // if (search) {
+  //   const searchResult = pokemonArray.filter((e) => {
+  //     return e.name.toLowerCase().includes(search.toLowerCase());
+  //   });
+  //   pokemonArray = Object.values(searchResult);
+  // }
 
   const endPoints = [];
   for (let i = 1; i <= 18; i++) {
     endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
   }
-
+  const [btn, setBtn] = useState();
   const fetchPokemonType = async () => {
     try {
       const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
-      pokemonsType[19].pokemon = results[19].data.pokemon;
-      for (let i = 1; i <= 18; i++) {
+
+      for (let i = 0; i < 18; i++) {
         pokemonsType[i].pokemon = results[i].data.pokemon;
       }
-
-      console.log(pokemonsType[17].pokemon);
-      console.log(pokemonsType);
+      setType(pokemonsType[btn].pokemon);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchPokemonType();
-  }, []);
-
+  }, [btn]);
+  const [type, setType] = useState([]);
+  const updatedPoke = pokemonArray.filter((pokemon) =>
+    type.some((selected) => selected.pokemon.name == pokemon.name)
+  );
+  // console.log(updatedPoke);
+  // console.log(btn);
+  const handleBtn = (i) => {
+    // pokemonArray = updatedPoke;
+    setBtn(i);
+    setSearch(null);
+  };
+  const typeNames = [
+    "Normal",
+    "Fighting",
+    "Flying",
+    "Poison",
+    "Ground",
+    "Rock",
+    "Bug",
+    "Ghost",
+    "Steel",
+    "Fire",
+    "Water",
+    "Grass",
+    "Electric",
+    "Psychic",
+    "Ice",
+    "Dragon",
+    "Dark",
+    "Fairy",
+  ];
+  let finalPokemons;
+  if (search) {
+    const searchResult = pokemonArray.filter((e) => {
+      return e.name.toLowerCase().includes(search.toLowerCase());
+    });
+    finalPokemons = Object.values(searchResult);
+  } else if (btn == "All Pokes") {
+    finalPokemons = pokemonArray;
+  } else if (btn) {
+    finalPokemons = updatedPoke;
+  }
   return (
     <>
-      <div className=" w-screen h-full">
-        <div className="flex justify-center ">
-          <div className="mt-5 flex items-center fixed bg-white border-blue-400 rounded-md border-2 bg-opacity-70 h-20 w-[40%]">
-            <input
-              className="w-[45%]  h-10 border-blue-400 border-2 rounded-md ml-6"
-              value={search}
-              onChange={handleSearch}
-              type="text"
-              placeholder="Search by Pokemon name ..."
-            />
+      <div className="inline-block w-screen h-full">
+        <div>
+          <div className="flex justify-center ">
+            <div
+              className=" flex items-center justify-center bg-gray-100  h-20
+             w-full"
+            >
+              <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
+                <input
+                  className="ml-[1rem] bg-gray-100 w-full rounded-full focus:outline-none "
+                  value={search}
+                  onChange={handleSearch}
+                  type="text"
+                  placeholder="Search by Pokemon name ..."
+                />
+              </div>
+            </div>
+          </div>
+          <div className="w-screen h-20 my-16 flex justify-center items-center ">
+            <div className="  h-full grid grid-cols-9  gap-5">
+              <button
+                onClick={() => handleBtn("All Pokes")}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                All Pokemons{" "}
+              </button>
+              {typeNames.map((e, i) => {
+                return (
+                  <>
+                    <button
+                      onClick={() => handleBtn(i)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      {e}
+                    </button>
+                  </>
+                );
+              })}
+            </div>
           </div>
         </div>
+
         <div className="flex justify-center w-screen">
-          <div className="grid grid-cols-4 gap-7 gap-x-11 gap-y-7  my-36">
+          <div className="grid grid-cols-4 gap-7 gap-x-11 gap-y-7   mb-10">
             {pokemons.length != 0 ? (
               pokemonArray.length === 0 ? (
                 <div className="flex justify-center w-screen mt-24 h-screen">
@@ -175,7 +233,7 @@ const Home = () => {
                   </div>
                 </div>
               ) : (
-                pokemonArray.map((pokemon, index) => {
+                finalPokemons?.map((pokemon, index) => {
                   const { name, url } = pokemon;
                   let pokeImg = url.split("")[url.length - 2];
                   let pokeImg2 = url.split("")[url.length - 3];
@@ -186,16 +244,13 @@ const Home = () => {
 
                   return (
                     <>
-                      <div
-                        className="bg-white  bg-opacity-60 border-blue-400 border-2 w-56 h-64 rounded-lg"
-                        key={index}
-                      >
+                      <div className="bg-white   border-2 w-56 h-64 rounded-2xl" key={index}>
                         <img
                           className="h-[11rem]"
                           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeImgFinal}.png`}
                           alt="Pokemons"
                         />
-                        <p className="text-center font-semibold text-2xl">{name}</p>
+                        <p className="text-center font-semibold mt-5 text-2xl">{name}</p>
                       </div>
                     </>
                   );
