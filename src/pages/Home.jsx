@@ -7,174 +7,169 @@ import axios from "axios";
 import PokemonAPI from "../utils/pokemonApi";
 
 const Home = () => {
-  const { pokemons } = useContext(PokemonsContext);
-  let pokemonArray = Object.values(pokemons);
-  const pokemonsType = [
-    {
-      name: "normal",
-      url: "https://pokeapi.co/api/v2/type/1/",
-      pokemon: [],
-    },
-    {
-      name: "fighting",
-      url: "https://pokeapi.co/api/v2/type/2/",
-      pokemon: [],
-    },
-    {
-      name: "flying",
-      url: "https://pokeapi.co/api/v2/type/3/",
-      pokemon: [],
-    },
-    {
-      name: "poison",
-      url: "https://pokeapi.co/api/v2/type/4/",
-      pokemon: [],
-    },
-    {
-      name: "ground",
-      url: "https://pokeapi.co/api/v2/type/5/",
-      pokemon: [],
-    },
-    {
-      name: "rock",
-      url: "https://pokeapi.co/api/v2/type/6/",
-      pokemon: [],
-    },
-    {
-      name: "bug",
-      url: "https://pokeapi.co/api/v2/type/7/",
-      pokemon: [],
-    },
-    {
-      name: "ghost",
-      url: "https://pokeapi.co/api/v2/type/8/",
-      pokemon: [],
-    },
-    {
-      name: "steel",
-      url: "https://pokeapi.co/api/v2/type/9/",
-      pokemon: [],
-    },
-    {
-      name: "fire",
-      url: "https://pokeapi.co/api/v2/type/10/",
-      pokemon: [],
-    },
-    {
-      name: "water",
-      url: "https://pokeapi.co/api/v2/type/11/",
-      pokemon: [],
-    },
-    {
-      name: "grass",
-      url: "https://pokeapi.co/api/v2/type/12/",
-      pokemon: [],
-    },
-    {
-      name: "electric",
-      url: "https://pokeapi.co/api/v2/type/13/",
-      pokemon: [],
-    },
-    {
-      name: "psychic",
-      url: "https://pokeapi.co/api/v2/type/14/",
-      pokemon: [],
-    },
-    {
-      name: "ice",
-      url: "https://pokeapi.co/api/v2/type/15/",
-      pokemon: [],
-    },
-    {
-      name: "dragon",
-      url: "https://pokeapi.co/api/v2/type/16/",
-      pokemon: [],
-    },
-    {
-      name: "dark",
-      url: "https://pokeapi.co/api/v2/type/17/",
-      pokemon: [],
-    },
-    {
-      name: "fairy",
-      url: "https://pokeapi.co/api/v2/type/18/",
-      pokemon: [],
-    },
-  ];
+  const { search, handleSearch, typeNames, handleBtn, btnColor, pokemons, finalPokemons } =
+    useContext(PokemonsContext);
+  // let pokemonArray = Object.values(pokemons);
+  // const pokemonsType = [
+  //   {
+  //     name: "normal",
+  //     url: "https://pokeapi.co/api/v2/type/1/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "fighting",
+  //     url: "https://pokeapi.co/api/v2/type/2/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "flying",
+  //     url: "https://pokeapi.co/api/v2/type/3/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "poison",
+  //     url: "https://pokeapi.co/api/v2/type/4/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "ground",
+  //     url: "https://pokeapi.co/api/v2/type/5/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "rock",
+  //     url: "https://pokeapi.co/api/v2/type/6/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "bug",
+  //     url: "https://pokeapi.co/api/v2/type/7/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "ghost",
+  //     url: "https://pokeapi.co/api/v2/type/8/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "steel",
+  //     url: "https://pokeapi.co/api/v2/type/9/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "fire",
+  //     url: "https://pokeapi.co/api/v2/type/10/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "water",
+  //     url: "https://pokeapi.co/api/v2/type/11/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "grass",
+  //     url: "https://pokeapi.co/api/v2/type/12/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "electric",
+  //     url: "https://pokeapi.co/api/v2/type/13/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "psychic",
+  //     url: "https://pokeapi.co/api/v2/type/14/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "ice",
+  //     url: "https://pokeapi.co/api/v2/type/15/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "dragon",
+  //     url: "https://pokeapi.co/api/v2/type/16/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "dark",
+  //     url: "https://pokeapi.co/api/v2/type/17/",
+  //     pokemon: [],
+  //   },
+  //   {
+  //     name: "fairy",
+  //     url: "https://pokeapi.co/api/v2/type/18/",
+  //     pokemon: [],
+  //   },
+  // ];
 
-  const [search, setSearch] = useState();
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
+  // const [search, setSearch] = useState();
+  // const handleSearch = (e) => {
+  //   setSearch(e.target.value);
+  // };
 
-  const endPoints = [];
-  for (let i = 1; i <= 18; i++) {
-    endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
-  }
-  const [btn, setBtn] = useState();
-  const fetchPokemonType = async () => {
-    try {
-      const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
+  // const endPoints = [];
+  // for (let i = 1; i <= 18; i++) {
+  //   endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
+  // }
+  // const [btn, setBtn] = useState();
+  // const fetchPokemonType = async () => {
+  //   try {
+  //     const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
 
-      for (let i = 0; i < 18; i++) {
-        pokemonsType[i].pokemon = results[i].data.pokemon;
-      }
-      setType(pokemonsType[btn].pokemon);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchPokemonType();
-  }, [btn]);
-  const [type, setType] = useState([]);
-  const updatedPoke = pokemonArray.filter((pokemon) =>
-    type.some((selected) => selected.pokemon.name == pokemon.name)
-  );
-  const [btnColor, setBtnColor] = useState();
-  const [btnColorAll, setBtnColorAll] = useState();
+  //     for (let i = 0; i < 18; i++) {
+  //       pokemonsType[i].pokemon = results[i].data.pokemon;
+  //     }
+  //     setType(pokemonsType[btn].pokemon);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchPokemonType();
+  // }, [btn]);
+  // const [type, setType] = useState([]);
+  // const updatedPoke = pokemonArray.filter((pokemon) =>
+  //   type.some((selected) => selected.pokemon.name == pokemon.name)
+  // );
+  // const [btnColor, setBtnColor] = useState();
 
-  const handleBtn = (i) => {
-    if (btnColor == "All Pokes" && btnColor !== null) {
-      setBtnColorAll(false);
-    } else {
-      setBtnColorAll(true);
-    }
-    setBtnColor(i);
-    setBtn(i);
-    setSearch(null);
-  };
-  const typeNames = [
-    "Normal",
-    "Fighting",
-    "Flying",
-    "Poison",
-    "Ground",
-    "Rock",
-    "Bug",
-    "Ghost",
-    "Steel",
-    "Fire",
-    "Water",
-    "Grass",
-    "Electric",
-    "Psychic",
-    "Ice",
-    "Dragon",
-    "Dark",
-    "Fairy",
-  ];
-  let finalPokemons = pokemonArray;
-  if (search) {
-    const searchResult = pokemonArray.filter((e) => {
-      return e.name.toLowerCase().includes(search.toLowerCase());
-    });
-    finalPokemons = Object.values(searchResult);
-  } else if (btn == "All Pokes") {
-    finalPokemons = pokemonArray;
-  } else if (btn) {
-    finalPokemons = updatedPoke;
-  }
+  // const handleBtn = (i) => {
+  //   setBtnColor(i);
+  //   setBtn(i);
+  //   setSearch(null);
+  // };
+  // const typeNames = [
+  //   "Normal",
+  //   "Fighting",
+  //   "Flying",
+  //   "Poison",
+  //   "Ground",
+  //   "Rock",
+  //   "Bug",
+  //   "Ghost",
+  //   "Steel",
+  //   "Fire",
+  //   "Water",
+  //   "Grass",
+  //   "Electric",
+  //   "Psychic",
+  //   "Ice",
+  //   "Dragon",
+  //   "Dark",
+  //   "Fairy",
+  // ];
+  // let finalPokemons = pokemonArray;
+  // if (search) {
+  //   const searchResult = pokemonArray.filter((e) => {
+  //     return e.name.toLowerCase().includes(search.toLowerCase());
+  //   });
+  //   finalPokemons = Object.values(searchResult);
+  // } else if (btn == "All Pokes") {
+  //   finalPokemons = pokemonArray;
+  // } else if (btn) {
+  //   finalPokemons = updatedPoke;
+  // }
   return (
     <>
       <div className="inline-block w-screen h-full">
@@ -198,11 +193,9 @@ const Home = () => {
           <div className="flex justify-center">
             <button
               onClick={() => handleBtn("All Pokes")}
-              className={` ${
-                btnColor == "All Pokes" ? "text-blue-500 bg-white" : "bg-blue-500 text-white"
-              } mt-10 hover:bg-blue-700 font-bold py-2 px-4 rounded`}
+              className={"bg-blue-500 text-white my-5 font-bold py-2 px-4 rounded"}
             >
-              All Pokemons
+              Reset Pokemons
             </button>
           </div>
           <div className="w-screen h-20 mt-2 mb-14 flex justify-center items-center ">
@@ -211,6 +204,7 @@ const Home = () => {
                 return (
                   <>
                     <button
+                      key={e}
                       onClick={() => handleBtn(i)}
                       className={` ${
                         btnColor == i ? "text-blue-500 bg-white" : "bg-blue-500 text-white"
