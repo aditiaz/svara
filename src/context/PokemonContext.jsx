@@ -1,14 +1,17 @@
 import { useEffect, useState, createContext } from "react";
-import axios from "axios";
 import PokemonAPI from "../utils/pokemonApi";
 
 export const PokemonsContext = createContext(null);
 
 export const PokemonsContextProvider = (props) => {
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   const [pokemons, setPokemons] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://pokeapi.co/api/v2/pokemon/?limit=300");
+      const response = await PokemonAPI.get("?limit=300");
       setPokemons(response.data.results);
     } catch (error) {
       console.log(error);
@@ -191,6 +194,7 @@ export const PokemonsContextProvider = (props) => {
         btnColor,
         pokemons,
         finalPokemons,
+        capitalizeFirstLetter,
       }}
     >
       {props.children}

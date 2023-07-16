@@ -1,201 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { PokemonsContext } from "../context/pokemonContext";
 import ash from "../assets/pictures/ash.png";
-import pokeAlt from "../assets/pictures/pokeAlt.png";
-import axios from "axios";
+import loveable from "../assets/icons/loveable.svg";
+import lovedissable from "../assets/icons/lovedissable.svg";
+import reset from "../assets/icons/restart.svg";
 import PokemonAPI from "../utils/pokemonApi";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { search, handleSearch, typeNames, handleBtn, btnColor, pokemons, finalPokemons } =
-    useContext(PokemonsContext);
-  // let pokemonArray = Object.values(pokemons);
-  // const pokemonsType = [
-  //   {
-  //     name: "normal",
-  //     url: "https://pokeapi.co/api/v2/type/1/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "fighting",
-  //     url: "https://pokeapi.co/api/v2/type/2/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "flying",
-  //     url: "https://pokeapi.co/api/v2/type/3/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "poison",
-  //     url: "https://pokeapi.co/api/v2/type/4/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "ground",
-  //     url: "https://pokeapi.co/api/v2/type/5/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "rock",
-  //     url: "https://pokeapi.co/api/v2/type/6/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "bug",
-  //     url: "https://pokeapi.co/api/v2/type/7/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "ghost",
-  //     url: "https://pokeapi.co/api/v2/type/8/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "steel",
-  //     url: "https://pokeapi.co/api/v2/type/9/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "fire",
-  //     url: "https://pokeapi.co/api/v2/type/10/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "water",
-  //     url: "https://pokeapi.co/api/v2/type/11/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "grass",
-  //     url: "https://pokeapi.co/api/v2/type/12/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "electric",
-  //     url: "https://pokeapi.co/api/v2/type/13/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "psychic",
-  //     url: "https://pokeapi.co/api/v2/type/14/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "ice",
-  //     url: "https://pokeapi.co/api/v2/type/15/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "dragon",
-  //     url: "https://pokeapi.co/api/v2/type/16/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "dark",
-  //     url: "https://pokeapi.co/api/v2/type/17/",
-  //     pokemon: [],
-  //   },
-  //   {
-  //     name: "fairy",
-  //     url: "https://pokeapi.co/api/v2/type/18/",
-  //     pokemon: [],
-  //   },
-  // ];
+  const {
+    search,
+    handleSearch,
+    typeNames,
+    handleBtn,
+    btnColor,
+    pokemons,
+    finalPokemons,
+    capitalizeFirstLetter,
+  } = useContext(PokemonsContext);
+  const [favoritePokemon, setFavortiePokemon] = useState({
+    name: "",
+    weight: "",
+    height: "",
+    type: "",
+    alias: "",
+  });
+  const fetchFavorite = async (id) => {
+    try {
+      const response = await PokemonAPI.get(`${id}/`);
 
-  // const [search, setSearch] = useState();
-  // const handleSearch = (e) => {
-  //   setSearch(e.target.value);
-  // };
-
-  // const endPoints = [];
-  // for (let i = 1; i <= 18; i++) {
-  //   endPoints.push(`https://pokeapi.co/api/v2/type/${i}/`);
-  // }
-  // const [btn, setBtn] = useState();
-  // const fetchPokemonType = async () => {
-  //   try {
-  //     const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
-
-  //     for (let i = 0; i < 18; i++) {
-  //       pokemonsType[i].pokemon = results[i].data.pokemon;
-  //     }
-  //     setType(pokemonsType[btn].pokemon);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchPokemonType();
-  // }, [btn]);
-  // const [type, setType] = useState([]);
-  // const updatedPoke = pokemonArray.filter((pokemon) =>
-  //   type.some((selected) => selected.pokemon.name == pokemon.name)
-  // );
-  // const [btnColor, setBtnColor] = useState();
-
-  // const handleBtn = (i) => {
-  //   setBtnColor(i);
-  //   setBtn(i);
-  //   setSearch(null);
-  // };
-  // const typeNames = [
-  //   "Normal",
-  //   "Fighting",
-  //   "Flying",
-  //   "Poison",
-  //   "Ground",
-  //   "Rock",
-  //   "Bug",
-  //   "Ghost",
-  //   "Steel",
-  //   "Fire",
-  //   "Water",
-  //   "Grass",
-  //   "Electric",
-  //   "Psychic",
-  //   "Ice",
-  //   "Dragon",
-  //   "Dark",
-  //   "Fairy",
-  // ];
-  // let finalPokemons = pokemonArray;
-  // if (search) {
-  //   const searchResult = pokemonArray.filter((e) => {
-  //     return e.name.toLowerCase().includes(search.toLowerCase());
-  //   });
-  //   finalPokemons = Object.values(searchResult);
-  // } else if (btn == "All Pokes") {
-  //   finalPokemons = pokemonArray;
-  // } else if (btn) {
-  //   finalPokemons = updatedPoke;
-  // }
+      setFavortiePokemon({
+        name: response.data.name,
+        weight: response.data.weight,
+        height: response.data.height,
+        type: response.data.types[0].type.name,
+        alias: "",
+      });
+      console.log(favoritePokemon);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log(favoritePokemon);
+  // moodal
+  const navigate = useNavigate();
+  const [modal, setModal] = useState(true);
+  const handleAddFavorite = () => {
+    setModal(!modal);
+  };
   return (
     <>
       <div className="inline-block w-screen h-full">
         <div>
           <div className="flex justify-center ">
-            <div
-              className=" flex items-center justify-center bg-gray-100  h-20
+            <nav
+              className=" border border-b-[3px] border-[EFEFEF] flex items-center justify-center bg-gray-100  h-20
              w-full"
             >
               <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
                 <input
-                  className="ml-[1rem] bg-gray-100 w-full rounded-full focus:outline-none "
+                  className="ml-[2rem]  bg-gray-100 w-full rounded-full focus:outline-none "
                   value={search}
                   onChange={handleSearch}
                   type="text"
                   placeholder="Search by Pokemon name ..."
                 />
               </div>
-            </div>
+              <button
+                onClick={() => navigate("/favoritepokemons/")}
+                className="text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
+              >
+                Your Favorites Pokemons
+              </button>
+            </nav>
           </div>
           <div className="flex justify-center">
             <button
               onClick={() => handleBtn("All Pokes")}
-              className={"bg-blue-500 text-white my-5 font-bold py-2 px-4 rounded"}
+              className={
+                "bg-blue-200 transform active:scale-y-75 transition-transform text-blue-500 my-5 w-[8rem] items-center gap-2   flex rounded-lg  py-2 justify-center "
+              }
             >
-              Reset Pokemons
+              <img className="w-[1rem]" src={reset} alt="" />
+              Reset Filter
             </button>
           </div>
           <div className="w-screen h-20 mt-2 mb-14 flex justify-center items-center ">
@@ -207,8 +95,8 @@ const Home = () => {
                       key={e}
                       onClick={() => handleBtn(i)}
                       className={` ${
-                        btnColor == i ? "text-blue-500 bg-white" : "bg-blue-500 text-white"
-                      }  hover:bg-blue-700 font-bold py-2 px-4 rounded`}
+                        btnColor == i ? "bg-blue-500 text-white" : "text-black bg-white"
+                      }  hover:bg-blue-200 hover:text-blue-500 py-2 px-4 rounded-full`}
                     >
                       {e}
                     </button>
@@ -244,14 +132,92 @@ const Home = () => {
 
                   return (
                     <>
-                      <div className="bg-white   border-2 w-56 h-64 rounded-2xl" key={index}>
-                        <img
-                          className="h-[11rem]"
-                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeImgFinal}.png`}
-                          alt="Pokemons"
-                        />
-                        <p className="text-center font-semibold mt-5 text-2xl">{name}</p>
+                      <div
+                        hidden={modal}
+                        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
+                      >
+                        <div className="w-full flex justify-center font-semibold">
+                          <div>
+                            <p className="my-[1rem] font-extralight text-3xl text-center">
+                              What you wanna call it ?
+                            </p>
+                            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
+                            <div className=" mt-[2rem] ">
+                              <div className="flex justify-around gap-3 w-[20rem] font-light">
+                                <button
+                                  onClick={() => {
+                                    fetchFavorite(pokeImgFinal);
+                                  }}
+                                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
+                                >
+                                  Add to Favorite
+                                </button>
+                                <button
+                                  onClick={handleAddFavorite}
+                                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <div className="bg-white   border-[1px] w-56 h-64 rounded-lg " key={index}>
+                        <div
+                          onClick={() => navigate(`/detailpokemons/${pokeImgFinal}`)}
+                          className="cursor-pointer rounded-md bg-[#e2e2e2] pt-[0.2rem] mt-[1rem] h-[11rem] mx-[1rem]"
+                        >
+                          <img
+                            className="h-[7rem] rounded-lg mt-[1rem] mx-10 "
+                            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeImgFinal}.png`}
+                            alt="Pokemons"
+                          />
+                        </div>
+                        <div className="flex justify-between h-[5rem] ">
+                          <p className="text-left ml-5 h-10 mt-5 text-xl">
+                            {capitalizeFirstLetter(name)}
+                          </p>
+                          <img
+                            onClick={handleAddFavorite}
+                            className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
+                            src={lovedissable}
+                            alt="icon"
+                          />
+                        </div>
+                      </div>
+                      {/*  */}
+                      {/* <div
+                        hidden={modal}
+                        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
+                      >
+                        <div className="w-full flex justify-center font-semibold">
+                          <div>
+                            <p className="my-[1rem] font-extralight text-3xl text-center">
+                              What you wanna call it ?
+                            </p>
+                            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
+                            <div className=" mt-[2rem] ">
+                              <div className="flex justify-around gap-3 w-[20rem] font-light">
+                                <button
+                                  onClick={() => {
+                                    fetchFavorite(pokeImgFinal);
+                                  }}
+                                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
+                                >
+                                  Add to Favorite
+                                </button>
+                                <button
+                                  onClick={handleAddFavorite}
+                                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> */}
                     </>
                   );
                 })
@@ -268,6 +234,38 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* <div
+        hidden={modal}
+        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
+      >
+        <div className="w-full flex justify-center font-semibold">
+          <div>
+            <p className="my-[1rem] font-extralight text-3xl text-center">
+              What you wanna call it ?
+            </p>
+            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
+            <div className=" mt-[2rem] ">
+              <div className="flex justify-around gap-3 w-[20rem] font-light">
+                <button
+                  onClick={() => {
+                    fetchFavorite(pokeImgFinal);
+                  }}
+                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
+                >
+                  Add to Favorite
+                </button>
+                <button
+                  onClick={handleAddFavorite}
+                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
     </>
   );
 };
