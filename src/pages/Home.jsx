@@ -20,18 +20,18 @@ const Home = () => {
     capitalizeFirstLetter,
   } = useContext(PokemonsContext);
 
-  const { allFave, setAllFave, alies, handleAlias, modal, handleModal, favPokemons } =
-    useContext(FavortiePokemonsContext);
+  const {
+    allFave,
+    setAllFave,
+    alies,
+    handleAlias,
+    modal,
+    handleModal,
+    favPokemons,
+    handleAddToFave,
+  } = useContext(FavortiePokemonsContext);
 
   const navigate = useNavigate();
-  const handleAddToFave = () => {
-    if (alies.trim() === "") {
-      alert("Alias tidak boleh kosong");
-    } else {
-      setAllFave((prevAllFave) => [...prevAllFave, { ...favPokemons, alias: alies }]);
-      handleModal(); // Close the modal after adding to favorites
-    }
-  };
 
   return (
     <>
