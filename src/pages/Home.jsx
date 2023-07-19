@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { PokemonsContext } from "../context/pokemonContext";
+import { FavortiePokemonsContext } from "../context/FavoritePokemonsContext";
 import ash from "../assets/pictures/ash.png";
 import loveable from "../assets/icons/loveable.svg";
 import lovedissable from "../assets/icons/lovedissable.svg";
 import reset from "../assets/icons/restart.svg";
-import PokemonAPI from "../utils/pokemonApi";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "./Modal";
 
 const Home = () => {
   const {
@@ -19,36 +19,20 @@ const Home = () => {
     finalPokemons,
     capitalizeFirstLetter,
   } = useContext(PokemonsContext);
-  const [favoritePokemon, setFavortiePokemon] = useState({
-    name: "",
-    weight: "",
-    height: "",
-    type: "",
-    alias: "",
-  });
-  const fetchFavorite = async (id) => {
-    try {
-      const response = await PokemonAPI.get(`${id}/`);
 
-      setFavortiePokemon({
-        name: response.data.name,
-        weight: response.data.weight,
-        height: response.data.height,
-        type: response.data.types[0].type.name,
-        alias: "",
-      });
-      console.log(favoritePokemon);
-    } catch (error) {
-      console.log(error);
+  const { allFave, setAllFave, alies, handleAlias, modal, handleModal, favPokemons } =
+    useContext(FavortiePokemonsContext);
+
+  const navigate = useNavigate();
+  const handleAddToFave = () => {
+    if (alies.trim() === "") {
+      alert("Alias tidak boleh kosong");
+    } else {
+      setAllFave((prevAllFave) => [...prevAllFave, { ...favPokemons, alias: alies }]);
+      handleModal(); // Close the modal after adding to favorites
     }
   };
-  // console.log(favoritePokemon);
-  // moodal
-  const navigate = useNavigate();
-  const [modal, setModal] = useState(true);
-  const handleAddFavorite = () => {
-    setModal(!modal);
-  };
+
   return (
     <>
       <div className="inline-block w-screen h-full">
@@ -56,7 +40,7 @@ const Home = () => {
           <div className="flex justify-center ">
             <nav
               className=" border border-b-[3px] border-[EFEFEF] flex items-center justify-center bg-gray-100  h-20
-             w-full"
+              w-full"
             >
               <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
                 <input
@@ -92,7 +76,7 @@ const Home = () => {
                 return (
                   <>
                     <button
-                      key={e}
+                      key={e.name}
                       onClick={() => handleBtn(i)}
                       className={` ${
                         btnColor == i ? "bg-blue-500 text-white" : "text-black bg-white"
@@ -132,38 +116,15 @@ const Home = () => {
 
                   return (
                     <>
-                      <div
-                        hidden={modal}
-                        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
-                      >
-                        <div className="w-full flex justify-center font-semibold">
-                          <div>
-                            <p className="my-[1rem] font-extralight text-3xl text-center">
-                              What you wanna call it ?
-                            </p>
-                            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
-                            <div className=" mt-[2rem] ">
-                              <div className="flex justify-around gap-3 w-[20rem] font-light">
-                                <button
-                                  onClick={() => {
-                                    fetchFavorite(pokeImgFinal);
-                                  }}
-                                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
-                                >
-                                  Add to Favorite
-                                </button>
-                                <button
-                                  onClick={handleAddFavorite}
-                                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="bg-white   border-[1px] w-56 h-64 rounded-lg " key={index}>
+                      <Modal
+                        addToFave={handleAddToFave}
+                        value={alies}
+                        onChange={handleAlias}
+                        modal={modal}
+                        handleModal={handleModal}
+                      />
+
+                      <div className="bg-white border-[1px] w-56 h-64 rounded-lg " key={index}>
                         <div
                           onClick={() => navigate(`/detailpokemons/${pokeImgFinal}`)}
                           className="cursor-pointer rounded-md bg-[#e2e2e2] pt-[0.2rem] mt-[1rem] h-[11rem] mx-[1rem]"
@@ -178,46 +139,27 @@ const Home = () => {
                           <p className="text-left ml-5 h-10 mt-5 text-xl">
                             {capitalizeFirstLetter(name)}
                           </p>
-                          <img
-                            onClick={handleAddFavorite}
-                            className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
-                            src={lovedissable}
-                            alt="icon"
-                          />
+                          {allFave.some((item) => item.name === name) ? (
+                            <img
+                              onClick={() => {
+                                setAllFave(allFave.filter((item) => item.name !== name));
+                              }}
+                              className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
+                              src={loveable}
+                              alt="icon"
+                            />
+                          ) : (
+                            <img
+                              onClick={() => {
+                                handleModal(pokeImgFinal);
+                              }}
+                              className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
+                              src={lovedissable}
+                              alt="icon"
+                            />
+                          )}
                         </div>
                       </div>
-                      {/*  */}
-                      {/* <div
-                        hidden={modal}
-                        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
-                      >
-                        <div className="w-full flex justify-center font-semibold">
-                          <div>
-                            <p className="my-[1rem] font-extralight text-3xl text-center">
-                              What you wanna call it ?
-                            </p>
-                            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
-                            <div className=" mt-[2rem] ">
-                              <div className="flex justify-around gap-3 w-[20rem] font-light">
-                                <button
-                                  onClick={() => {
-                                    fetchFavorite(pokeImgFinal);
-                                  }}
-                                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
-                                >
-                                  Add to Favorite
-                                </button>
-                                <button
-                                  onClick={handleAddFavorite}
-                                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div> */}
                     </>
                   );
                 })
@@ -234,38 +176,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      {/* <div
-        hidden={modal}
-        className=" fixed rounded-lg border border-[2px] border-white bg-[#EFEFEF] bg-opacity-50 w-[30rem] h-[12rem]  top-[40%] left-[40%]"
-      >
-        <div className="w-full flex justify-center font-semibold">
-          <div>
-            <p className="my-[1rem] font-extralight text-3xl text-center">
-              What you wanna call it ?
-            </p>
-            <input className="w-[15rem]  mx-10 h-[2rem]" type="text" />
-            <div className=" mt-[2rem] ">
-              <div className="flex justify-around gap-3 w-[20rem] font-light">
-                <button
-                  onClick={() => {
-                    fetchFavorite(pokeImgFinal);
-                  }}
-                  className="bg-white py-2 w-[10rem] transform hover:scale-95 transition-transform"
-                >
-                  Add to Favorite
-                </button>
-                <button
-                  onClick={handleAddFavorite}
-                  className="bg-white w-[10rem] transform hover:scale-95 transition-transform"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };
