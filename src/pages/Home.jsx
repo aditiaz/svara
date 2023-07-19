@@ -18,18 +18,11 @@ const Home = () => {
     pokemons,
     finalPokemons,
     capitalizeFirstLetter,
+    extractNumberFromUrl,
   } = useContext(PokemonsContext);
 
-  const {
-    allFave,
-    setAllFave,
-    alies,
-    handleAlias,
-    modal,
-    handleModal,
-    favPokemons,
-    handleAddToFave,
-  } = useContext(FavortiePokemonsContext);
+  const { allFave, setAllFave, alies, handleAlias, modal, handleModal, handleAddToFave } =
+    useContext(FavortiePokemonsContext);
 
   const navigate = useNavigate();
 
@@ -45,7 +38,7 @@ const Home = () => {
               <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
                 <input
                   className="ml-[2rem]  bg-gray-100 w-full rounded-full focus:outline-none "
-                  value={search}
+                  value={search ? search : ""}
                   onChange={handleSearch}
                   type="text"
                   placeholder="Search by Pokemon name ..."
@@ -74,7 +67,7 @@ const Home = () => {
             <div className="  h-full grid grid-cols-9  gap-5">
               {typeNames.map((e, i) => {
                 return (
-                  <>
+                  <React.Fragment key={e}>
                     <button
                       key={e.name}
                       onClick={() => handleBtn(i)}
@@ -84,7 +77,7 @@ const Home = () => {
                     >
                       {e}
                     </button>
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>
@@ -107,15 +100,10 @@ const Home = () => {
               ) : (
                 finalPokemons?.map((pokemon, index) => {
                   const { name, url } = pokemon;
-                  let pokeImg = url.split("")[url.length - 2];
-                  let pokeImg2 = url.split("")[url.length - 3];
-                  if (pokeImg2 == "/") {
-                    pokeImg2 = "";
-                  }
-                  const pokeImgFinal = pokeImg2 + pokeImg;
+                  const number = extractNumberFromUrl(url);
 
                   return (
-                    <>
+                    <React.Fragment key={number}>
                       <Modal
                         addToFave={handleAddToFave}
                         value={alies}
@@ -126,12 +114,12 @@ const Home = () => {
 
                       <div className="bg-white border-[1px] w-56 h-64 rounded-lg " key={index}>
                         <div
-                          onClick={() => navigate(`/detailpokemons/${pokeImgFinal}`)}
+                          onClick={() => navigate(`/detailpokemons/${number}`)}
                           className="cursor-pointer rounded-md bg-[#e2e2e2] pt-[0.2rem] mt-[1rem] h-[11rem] mx-[1rem]"
                         >
                           <img
                             className="h-[7rem] rounded-lg mt-[1rem] mx-10 "
-                            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${pokeImgFinal}.png`}
+                            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${number}.png`}
                             alt="Pokemons"
                           />
                         </div>
@@ -151,7 +139,7 @@ const Home = () => {
                           ) : (
                             <img
                               onClick={() => {
-                                handleModal(pokeImgFinal);
+                                handleModal(number);
                               }}
                               className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
                               src={lovedissable}
@@ -160,7 +148,7 @@ const Home = () => {
                           )}
                         </div>
                       </div>
-                    </>
+                    </React.Fragment>
                   );
                 })
               )

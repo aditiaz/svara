@@ -48,6 +48,16 @@ export const PokemonsContextProvider = (props) => {
   const updatedPoke = pokemonArray.filter((pokemon) =>
     type.some((selected) => selected.pokemon.name == pokemon.name)
   );
+
+  const extractNumberFromUrl = (url) => {
+    const regex = /\/(\d+)\//; // Regular expression untuk mencari angka antara dua garis miring
+    const match = url.match(regex);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return null; // Jika angka tidak ditemukan
+  };
+
   const [btnColor, setBtnColor] = useState();
   let finalPokemons = pokemonArray;
   if (search) {
@@ -84,6 +94,7 @@ export const PokemonsContextProvider = (props) => {
         btnColor,
         finalPokemons,
         capitalizeFirstLetter,
+        extractNumberFromUrl,
       }}
     >
       {props.children}

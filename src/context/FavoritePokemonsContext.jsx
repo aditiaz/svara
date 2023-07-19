@@ -20,12 +20,18 @@ export const FavortiePokemonsContextProvider = (props) => {
     id: "",
   });
 
+  // useEffect(() => {
+  //   fetchFavorite(id);
+  //   console.log(`fetchFavorite triggered with id: ${id}`);
+  // }, [id]);
+
   useEffect(() => {
-    fetchFavorite(id);
+    if (typeof id !== "undefined") {
+      fetchFavorite(id);
+      console.log(`fetchFavorite triggered with id: ${id}`);
+    }
   }, [id]);
-  useEffect(() => {
-    console.log(allFave);
-  }, [allFave]);
+
   useEffect(() => {
     setFavPokemons({
       ...favPokemons,
@@ -49,6 +55,7 @@ export const FavortiePokemonsContextProvider = (props) => {
         type: response.data.types[0].type.name,
         id: od,
       }));
+      console.log(`fetchFavorite triggered with id: ${id}`);
     } catch (error) {
       console.log(error);
     }

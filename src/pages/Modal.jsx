@@ -11,7 +11,7 @@ export const Modal = ({ modal, handleModal, addToFave, value, onChange }) => {
               What you wanna call it ?
             </p>
             <input
-              value={value}
+              value={value ? value : ""}
               onChange={onChange}
               className="w-[15rem]  mx-10 h-[2rem]"
               type="text"
