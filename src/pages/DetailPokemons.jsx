@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
-import { PokemonsContext } from "../context/pokemonContext";
-import PokemonAPI from "../utils/pokemonApi";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from 'react';
+import { PokemonsContext } from '../context/pokemonContext';
+import PokemonAPI from '../utils/pokemonApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DetailPokemons = () => {
   const { capitalizeFirstLetter } = useContext(PokemonsContext);
   const { id } = useParams();
+  const navigate = useNavigate();
   const [detailPokemon, setDetailPokemon] = useState({
-    name: "",
-    weight: "",
-    height: "",
-    type: "",
+    name: '',
+    weight: '',
+    height: '',
+    type: '',
   });
   useEffect(() => {
     fetchDetail();
@@ -33,11 +34,17 @@ const DetailPokemons = () => {
   return (
     <>
       <div className="flex  justify-center items-center h-screen w-screen">
+        <button
+          onClick={() => navigate('/')}
+          className="text-xl absolute top-2 left-2 md:text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
+        >
+          Back Home
+        </button>
         <div className="h-[30rem] w-[30rem] rounded-lg bg-white flex justify-center items-center">
           <div className="w-full  h-full ">
             <div
               onClick={() => navigate(`/detailpokemons/${pokeImgFinal}`)}
-              className="cursor-pointer rounded-lg pt-[3rem] bg-[#e2e2e2] h-[20rem] mt-[1rem] h-[11rem] mx-[1rem]"
+              className=" rounded-lg pt-[3rem] bg-[#e2e2e2] h-[20rem] mt-[1rem]  mx-[1rem]"
             >
               <img
                 className="w-[20rem]  h-52 mx-[19%]"

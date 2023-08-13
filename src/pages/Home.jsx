@@ -19,6 +19,8 @@ const Home = () => {
     finalPokemons,
     capitalizeFirstLetter,
     extractNumberFromUrl,
+    btn,
+    setBtn,
   } = useContext(PokemonsContext);
 
   const { allFave, setAllFave, alies, handleAlias, modal, handleModal, handleAddToFave } =
@@ -32,10 +34,10 @@ const Home = () => {
         <div>
           <div className="flex justify-center ">
             <nav
-              className=" border border-b-[3px] border-[EFEFEF] flex items-center justify-center bg-gray-100  h-20
+              className=" gap-5 border  border-b-[3px] border-[EFEFEF] flex items-center justify-center bg-gray-100  h-20
               w-full"
             >
-              <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
+              <div className="md:w-[15%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
                 <input
                   className="md:ml-[2rem] p-2 bg-gray-100 w-full rounded-full focus:outline-none "
                   value={search ? search : ''}
@@ -44,51 +46,39 @@ const Home = () => {
                   placeholder="Search by Pokemon name ..."
                 />
               </div>
+              <select
+                value={btn}
+                onChange={handleBtn}
+                className="text-black bg-white hover:bg-blue-200 hover:text-blue-500 text-[10px] md:text-base rounded-full w-[70px] md:w-[7rem] p-2"
+              >
+                {typeNames.map((typeName, index) => (
+                  <option key={index} value={index}>
+                    {typeName}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => setBtn('All Pokes')}
+                className=" transform active:scale-y-75 transition-transform text-blue-500 my-5  items-center gap-2   flex rounded-lg  py-2 justify-center "
+              >
+                <img className="w-[2rem]" src={reset} alt="" />
+              </button>
               <button
                 onClick={() => navigate('/favoritepokemons/')}
-                className="text-sm md:text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
+                className="text-sm md:text-2xl  transform hover:scale-95 transition-transform"
               >
-                Your Favorites Pokemons
+                <img
+                  className="h-[2rem] transform hover:scale-125 transition-transform  mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
+                  src={loveable}
+                  alt="icon"
+                />
               </button>
             </nav>
           </div>
-          {/*  */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => handleBtn('All Pokes')}
-              className={
-                'bg-blue-200 transform active:scale-y-75 transition-transform text-blue-500 my-5 w-[8rem] items-center gap-2   flex rounded-lg  py-2 justify-center '
-              }
-            >
-              <img className="w-[1rem]" src={reset} alt="" />
-              Reset Filter
-            </button>
-          </div>
-          <div className="w-screen h-20 mt-2 mb-14 flex justify-center items-center ">
-            <div className="  h-full grid grid-cols-9  gap-1 md:gap-5 ">
-              {typeNames.map((e, i) => {
-                return (
-                  <div key={e}>
-                    <button
-                      key={e.name}
-                      onClick={() => handleBtn(i)}
-                      className={` ${
-                        btnColor == i ? 'bg-blue-500 text-white' : 'text-black bg-white'
-                      }  hover:bg-blue-200 hover:text-blue-500 text-[10px] md:text-base rounded-full
-                       w-[50px] md:w-[7rem] p-2`}
-                    >
-                      {e}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          {/*  */}
         </div>
 
         <div className="flex justify-center w-screen">
-          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-7 md:gap-x-11 gap-y-7   mb-10">
+          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-7 md:gap-x-11 gap-y-7   md:mb-10">
             {pokemons.length != 0 ? (
               finalPokemons.length === 0 ? (
                 <div className="flex justify-center w-screen mt-24 h-screen">
@@ -115,7 +105,7 @@ const Home = () => {
                         handleModal={handleModal}
                       />
 
-                      <div className="bg-white border-[1px] w-56 h-64 rounded-lg " key={index}>
+                      <div className="bg-white border-[1px] md:w-56 h-64 rounded-lg " key={index}>
                         <div
                           onClick={() => navigate(`/detailpokemons/${number}`)}
                           className="cursor-pointer rounded-md bg-[#e2e2e2] pt-[0.2rem] mt-[1rem] h-[11rem] mx-[1rem]"

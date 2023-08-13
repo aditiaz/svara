@@ -1,10 +1,10 @@
-import { useEffect, useState, createContext } from "react";
-import PokemonAPI from "../utils/pokemonApi";
-import { pokemonsType, typeNames } from "../data/pokeType";
+import { useEffect, useState, createContext } from 'react';
+import PokemonAPI from '../utils/pokemonApi';
+import { pokemonsType, typeNames } from '../data/pokeType';
 
 export const PokemonsContext = createContext(null);
 
-export const PokemonsContextProvider = (props) => {
+export const PokemonsContextProvider = props => {
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -12,7 +12,7 @@ export const PokemonsContextProvider = (props) => {
   const [pokemons, setPokemons] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await PokemonAPI.get("?limit=300");
+      const response = await PokemonAPI.get('?limit=300');
       setPokemons(response.data.results);
     } catch (error) {
       console.log(error);
@@ -22,7 +22,7 @@ export const PokemonsContextProvider = (props) => {
   let pokemonArray = Object.values(pokemons);
 
   const [search, setSearch] = useState();
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     setSearch(e.target.value);
   };
   const [type, setType] = useState([]);
@@ -34,7 +34,7 @@ export const PokemonsContextProvider = (props) => {
 
   const fetchPokemonType = async () => {
     try {
-      const results = await Promise.all(endPoints.map((url) => PokemonAPI.get(url)));
+      const results = await Promise.all(endPoints.map(url => PokemonAPI.get(url)));
 
       for (let i = 0; i < 18; i++) {
         pokemonsType[i].pokemon = results[i].data.pokemon;
@@ -45,35 +45,35 @@ export const PokemonsContextProvider = (props) => {
     }
   };
 
-  const updatedPoke = pokemonArray.filter((pokemon) =>
-    type?.some((selected) => selected.pokemon.name == pokemon.name)
+  const updatedPoke = pokemonArray.filter(pokemon =>
+    type?.some(selected => selected.pokemon.name == pokemon.name),
   );
 
-  const extractNumberFromUrl = (url) => {
-    const regex = /\/(\d+)\//; 
+  const extractNumberFromUrl = url => {
+    const regex = /\/(\d+)\//;
     const match = url.match(regex);
     if (match && match[1]) {
       return match[1];
     }
-    return null; 
+    return null;
   };
 
   const [btnColor, setBtnColor] = useState();
   let finalPokemons = pokemonArray;
   if (search) {
-    const searchResult = pokemonArray.filter((e) => {
+    const searchResult = pokemonArray.filter(e => {
       return e.name.toLowerCase().includes(search.toLowerCase());
     });
     finalPokemons = Object.values(searchResult);
-  } else if (btn == "All Pokes") {
+  } else if (btn == 'All Pokes') {
     finalPokemons = pokemonArray;
   } else if (btn) {
     finalPokemons = updatedPoke;
   }
 
-  const handleBtn = (i) => {
-    setBtnColor(i);
-    setBtn(i);
+  const handleBtn = event => {
+    setBtnColor(event.target.value);
+    setBtn(event.target.value);
     setSearch(null);
   };
   useEffect(() => {
@@ -95,6 +95,8 @@ export const PokemonsContextProvider = (props) => {
         finalPokemons,
         capitalizeFirstLetter,
         extractNumberFromUrl,
+        btn,
+        setBtn,
       }}
     >
       {props.children}

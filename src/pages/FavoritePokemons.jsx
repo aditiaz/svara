@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { FavortiePokemonsContext } from "../context/FavoritePokemonsContext";
-import { PokemonsContext } from "../context/pokemonContext";
-import del from "../assets/icons/delete.svg";
-import ash from "../assets/pictures/ash.png";
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FavortiePokemonsContext } from '../context/FavoritePokemonsContext';
+import { PokemonsContext } from '../context/pokemonContext';
+import del from '../assets/icons/delete.svg';
+import ash from '../assets/pictures/ash.png';
 const FavoritePokemons = () => {
   const { allFave, setAllFave } = useContext(FavortiePokemonsContext);
   const { capitalizeFirstLetter } = useContext(PokemonsContext);
@@ -15,12 +15,12 @@ const FavoritePokemons = () => {
           className=" flex items-center justify-center bg-gray-100  h-20
              w-full"
         >
-          <h2 className="text-2xl border border-black border-b-2 ml-5 px-3">
+          <h2 className="md:text-2xl border border-black border-b-2 ml-5 px-3">
             These are your favorites Pokemons
           </h2>
           <button
-            onClick={() => navigate("/")}
-            className="text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
+            onClick={() => navigate('/')}
+            className="text-xl md:text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
           >
             Back Home
           </button>
@@ -38,15 +38,15 @@ const FavoritePokemons = () => {
           </div>
         </div>
       ) : (
-        <div className="flex justify-center w-screen mt-6">
-          <div className="grid grid-cols-4 gap-7 gap-x-11 gap-y-7   mb-10">
-            {allFave.map((e) => {
+        <div className="flex justify-center m w-screen mt-6">
+          <div className="grid md:grid-cols-4 grid-cols-2  gap-7 gap-x-11 gap-y-7   mb-10">
+            {allFave.map(e => {
               return (
-                <div key={e.alias} className="bg-white   border-2 w-[15rem] h-[17rem] rounded-2xl">
+                <div key={e.alias} className="bg-white  border-2 w-52 h-64 rounded-2xl">
                   <div className="flex justify-end">
                     <img
                       onClick={() => {
-                        setAllFave(allFave.filter((item) => item.name !== e.name));
+                        setAllFave(allFave.filter(item => item.name !== e.name));
                       }}
                       className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
                       src={del}
@@ -59,8 +59,8 @@ const FavoritePokemons = () => {
                     src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/${e.id}.png`}
                     alt="Pokemons"
                   />
-                  <p className="text-center mt-7 font-semibold mt-5 text-2xl">{e.alias}</p>
-                  <div className="h-[10px]  my-2">
+                  <p className="text-center mt-7 font-semibold text-base md:text-2xl">{e.alias}</p>
+                  <div className="h-[10px] text-xs my-2">
                     <div className="flex justify-around  text-center font-light">
                       <p>Name : {capitalizeFirstLetter(e.name)}</p>
                       <p>Type : {capitalizeFirstLetter(e.type)}</p>
