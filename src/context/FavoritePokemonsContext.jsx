@@ -1,10 +1,10 @@
-import { useEffect, useState, createContext } from "react";
-import PokemonAPI from "../utils/pokemonApi";
+import { useEffect, useState, createContext } from 'react';
+import PokemonAPI from '../utils/pokemonApi';
 export const FavortiePokemonsContext = createContext(null);
 
-export const FavortiePokemonsContextProvider = (props) => {
+export const FavortiePokemonsContextProvider = props => {
   const [alies, setAlias] = useState();
-  const handleAlias = (e) => {
+  const handleAlias = e => {
     setAlias(e.target.value);
   };
 
@@ -12,21 +12,16 @@ export const FavortiePokemonsContextProvider = (props) => {
   const [allFave, setAllFave] = useState([]);
 
   const [favPokemons, setFavPokemons] = useState({
-    name: "",
-    weight: "",
-    height: "",
-    type: "",
-    alias: "",
-    id: "",
+    name: '',
+    weight: '',
+    height: '',
+    type: '',
+    alias: '',
+    id: '',
   });
 
-  // useEffect(() => {
-  //   fetchFavorite(id);
-  //   console.log(`fetchFavorite triggered with id: ${id}`);
-  // }, [id]);
-
   useEffect(() => {
-    if (typeof id !== "undefined") {
+    if (typeof id !== 'undefined') {
       fetchFavorite(id);
       console.log(`fetchFavorite triggered with id: ${id}`);
     }
@@ -39,15 +34,15 @@ export const FavortiePokemonsContextProvider = (props) => {
     });
   }, [alies]);
   const [modal, setModal] = useState(true);
-  const handleModal = (e) => {
-    setAlias("");
+  const handleModal = e => {
+    setAlias('');
     setId(e);
     setModal(!modal);
   };
-  const fetchFavorite = async (od) => {
+  const fetchFavorite = async od => {
     try {
       const response = await PokemonAPI.get(`${od}/`);
-      setFavPokemons((prevFavPokemons) => ({
+      setFavPokemons(prevFavPokemons => ({
         ...prevFavPokemons,
         name: response.data.name,
         weight: response.data.weight,
@@ -62,10 +57,10 @@ export const FavortiePokemonsContextProvider = (props) => {
   };
 
   const handleAddToFave = () => {
-    if (alies.trim() === "") {
-      alert("Alias tidak boleh kosong");
+    if (alies.trim() === '') {
+      alert('Alias tidak boleh kosong');
     } else {
-      setAllFave((prevAllFave) => [...prevAllFave, { ...favPokemons, alias: alies }]);
+      setAllFave(prevAllFave => [...prevAllFave, { ...favPokemons, alias: alies }]);
       handleModal();
     }
   };

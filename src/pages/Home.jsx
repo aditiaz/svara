@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
-import { PokemonsContext } from "../context/pokemonContext";
-import { FavortiePokemonsContext } from "../context/FavoritePokemonsContext";
-import ash from "../assets/pictures/ash.png";
-import loveable from "../assets/icons/loveable.svg";
-import lovedissable from "../assets/icons/lovedissable.svg";
-import reset from "../assets/icons/restart.svg";
-import { useNavigate } from "react-router-dom";
-import { Modal } from "./Modal";
+import React, { useContext } from 'react';
+import { PokemonsContext } from '../context/pokemonContext';
+import { FavortiePokemonsContext } from '../context/FavoritePokemonsContext';
+import ash from '../assets/pictures/ash.png';
+import loveable from '../assets/icons/loveable.svg';
+import lovedissable from '../assets/icons/lovedissable.svg';
+import reset from '../assets/icons/restart.svg';
+import { useNavigate } from 'react-router-dom';
+import { Modal } from './Modal';
 
 const Home = () => {
   const {
@@ -37,26 +37,27 @@ const Home = () => {
             >
               <div className="w-[45%] flex bg-gray-100 h-10 border-blue-400 border-2 rounded-full ml-6">
                 <input
-                  className="ml-[2rem]  bg-gray-100 w-full rounded-full focus:outline-none "
-                  value={search ? search : ""}
+                  className="md:ml-[2rem] p-2 bg-gray-100 w-full rounded-full focus:outline-none "
+                  value={search ? search : ''}
                   onChange={handleSearch}
                   type="text"
                   placeholder="Search by Pokemon name ..."
                 />
               </div>
               <button
-                onClick={() => navigate("/favoritepokemons/")}
-                className="text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
+                onClick={() => navigate('/favoritepokemons/')}
+                className="text-sm md:text-2xl border border-black border-b-2 ml-5 px-3 transform hover:scale-95 transition-transform"
               >
                 Your Favorites Pokemons
               </button>
             </nav>
           </div>
+          {/*  */}
           <div className="flex justify-center">
             <button
-              onClick={() => handleBtn("All Pokes")}
+              onClick={() => handleBtn('All Pokes')}
               className={
-                "bg-blue-200 transform active:scale-y-75 transition-transform text-blue-500 my-5 w-[8rem] items-center gap-2   flex rounded-lg  py-2 justify-center "
+                'bg-blue-200 transform active:scale-y-75 transition-transform text-blue-500 my-5 w-[8rem] items-center gap-2   flex rounded-lg  py-2 justify-center '
               }
             >
               <img className="w-[1rem]" src={reset} alt="" />
@@ -64,28 +65,30 @@ const Home = () => {
             </button>
           </div>
           <div className="w-screen h-20 mt-2 mb-14 flex justify-center items-center ">
-            <div className="  h-full grid grid-cols-9  gap-5">
+            <div className="  h-full grid grid-cols-9  gap-1 md:gap-5 ">
               {typeNames.map((e, i) => {
                 return (
-                  <React.Fragment key={e}>
+                  <div key={e}>
                     <button
                       key={e.name}
                       onClick={() => handleBtn(i)}
                       className={` ${
-                        btnColor == i ? "bg-blue-500 text-white" : "text-black bg-white"
-                      }  hover:bg-blue-200 hover:text-blue-500 py-2 px-4 rounded-full`}
+                        btnColor == i ? 'bg-blue-500 text-white' : 'text-black bg-white'
+                      }  hover:bg-blue-200 hover:text-blue-500 text-[10px] md:text-base rounded-full
+                       w-[50px] md:w-[7rem] p-2`}
                     >
                       {e}
                     </button>
-                  </React.Fragment>
+                  </div>
                 );
               })}
             </div>
           </div>
+          {/*  */}
         </div>
 
         <div className="flex justify-center w-screen">
-          <div className="grid grid-cols-4 gap-7 gap-x-11 gap-y-7   mb-10">
+          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-7 md:gap-x-11 gap-y-7   mb-10">
             {pokemons.length != 0 ? (
               finalPokemons.length === 0 ? (
                 <div className="flex justify-center w-screen mt-24 h-screen">
@@ -127,10 +130,10 @@ const Home = () => {
                           <p className="text-left ml-5 h-10 mt-5 text-xl">
                             {capitalizeFirstLetter(name)}
                           </p>
-                          {allFave.some((item) => item.name === name) ? (
+                          {allFave.some(item => item.name === name) ? (
                             <img
                               onClick={() => {
-                                setAllFave(allFave.filter((item) => item.name !== name));
+                                setAllFave(allFave.filter(item => item.name !== name));
                               }}
                               className="h-[2rem] transform hover:scale-125 transition-transform mt-[1rem] mr-[1rem] cursor-pointer  hover:text-[#ff0000]"
                               src={loveable}

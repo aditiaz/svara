@@ -39,23 +39,23 @@ export const PokemonsContextProvider = (props) => {
       for (let i = 0; i < 18; i++) {
         pokemonsType[i].pokemon = results[i].data.pokemon;
       }
-      setType(pokemonsType[btn].pokemon);
+      setType(pokemonsType[btn]?.pokemon);
     } catch (error) {
       console.log(error);
     }
   };
 
   const updatedPoke = pokemonArray.filter((pokemon) =>
-    type.some((selected) => selected.pokemon.name == pokemon.name)
+    type?.some((selected) => selected.pokemon.name == pokemon.name)
   );
 
   const extractNumberFromUrl = (url) => {
-    const regex = /\/(\d+)\//; // Regular expression untuk mencari angka antara dua garis miring
+    const regex = /\/(\d+)\//; 
     const match = url.match(regex);
     if (match && match[1]) {
       return match[1];
     }
-    return null; // Jika angka tidak ditemukan
+    return null; 
   };
 
   const [btnColor, setBtnColor] = useState();
